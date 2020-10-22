@@ -81,6 +81,9 @@ h1 button {
 .card.left {
   transform: translateX(-50%) rotateY(10deg);
 }
+.card.right {
+  transform: translateX(50%) rotateY(-10deg);
+}
 
 .inner-card {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
@@ -133,6 +136,7 @@ h1 button {
 
 .navigation {
   display: flex;
+  align-items: center;
   margin: 20px 0px;
 }
 
@@ -141,6 +145,7 @@ h1 button {
   border: none;
   background-color: transparent;
   font-size: 16px;
+  padding-top: 4px;
 }
 
 .navigation p {
