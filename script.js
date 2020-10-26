@@ -1,3 +1,7 @@
+// Updates: try to add a trash can icon to delete each
+// individual card and clear that item from local storage.
+// try styling css to make interesting
+
 const cardsContainer = document.getElementById("cards-container");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
@@ -18,20 +22,7 @@ let currentActiveCard = 0;
 const cardsEl = [];
 
 // Store card data
-const cardsData = [
-  {
-    question: "What must a variable begin with?",
-    answer: "A letter, $ or _",
-  },
-  {
-    question: "What is a variable?",
-    answer: "Container for a piece of data",
-  },
-  {
-    question: "Example of Case sensitive variable",
-    answer: "thisIsAVariable",
-  },
-];
+const cardsData = getCardsData();
 
 // Create all cards
 function createCards() {
@@ -72,10 +63,23 @@ function updateCurrentText() {
   currentEl.innerText = `${currentActiveCard + 1}/${cardsEl.length}`;
 }
 
+// Get cards from local storage
+function getCardsData() {
+  const cards = JSON.parse(localStorage.getItem("cards"));
+  return cards === null ? [] : cards;
+}
+
 createCards();
+
+// Add card to local storage
+function setCardsData(cards) {
+  localStorage.setItem("cards", JSON.stringify(cards));
+  window.location.reload();
+}
 
 // Event listeners
 
+// next button
 nextBtn.addEventListener("click", () => {
   cardsEl[currentActiveCard].className = "card left";
 
@@ -90,6 +94,7 @@ nextBtn.addEventListener("click", () => {
   updateCurrentText();
 });
 
+// previous button
 prevBtn.addEventListener("click", () => {
   cardsEl[currentActiveCard].className = "card right";
 
@@ -102,4 +107,34 @@ prevBtn.addEventListener("click", () => {
   cardsEl[currentActiveCard].className = "card active";
 
   updateCurrentText();
+});
+
+// Show button
+showBtn.addEventListener("click", () => addContainer.classList.add("show"));
+
+// hide button
+hideBtn.addEventListener("click", () => addContainer.classList.remove("show"));
+
+// Add card button
+addCardBtn.addEventListener("click", () => {
+  const question = questionEl.value;
+  const answer = answerEl.value;
+
+  if (question.trim() && answer.trim()) {
+    const newCard = { question, answer };
+    createCard(newCard);
+    questionEl.value = "";
+    answerEl.value = "";
+
+    addContainer.classList.remove("show");
+    cardsData.push(newCard);
+    setCardsData(cardsData);
+  }
+});
+
+// clear cards button
+clearBtn.addEventListener("click", () => {
+  localStorage.clear();
+  cardsContainer.innerHTML = "";
+  window.location.reload();
 });
